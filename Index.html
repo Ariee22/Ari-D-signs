@@ -1,61 +1,114 @@
 <!DOCTYPE html>
-<head>			
-<title>Nail Booking System</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tany Nails | Booking</title>
+
 <style>
-body { font- family : Arial;
-       background-color : #fceef2;
-	   margin:0;
-	   padding: 20px; }
-.container { background:white;
-	         max-width:450px;
-			 margin:auto;
-			 padding:20px;
-			border-radius: 15px; }
-h1 { color: #b34d76;
-     text-align:center;}
-input, select, button { width: 100%;
-                        padding: 12px;
-						margin : 8px 0;
-						box-sizing: border-box; }
-button{ 
-     background-color: #b34d76;
-	 color : white;
-	 border : none;
-	 border-radius: 8px;
-	 cursor: pointer; }
-button:hover{ 
-          background-color: #873653; }
-.booking { background: #fceef2;
-           padding:10px;
-		   margin-top: 10px;
-		   border-radius: 8px; }
+body {
+    font-family: Arial, sans-serif;
+    background: #fceef2;
+    padding: 20px;
+    margin: 0;
+    color: #49343d;
+}
+
+.container {
+    max-width: 450px;
+    margin: auto;
+    background: white;
+    padding: 22px;
+    border-radius: 18px;
+    box-shadow: 0 5px 20px #e8cbd5;
+}
+
+h1 {
+    color: #b34d76;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    color: #777;
+}
+
+input, select, button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 13px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+input, select {
+    border: 1px solid #ddd;
+}
+
+button {
+    border: none;
+    background: #b34d76;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #873653;
+}
+
+.booking {
+    background: #fceef2;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 12px 0;
+    overflow-wrap: anywhere;
+}
+
+.cancel {
+    background: #777;
+}
+
+footer {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    margin-top: 20px;
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
-<h1> Tany Nails<h1>
-<h3>Book an Appointment<h3>
 
-<form id = "bookingForm">
+<h1>💅 Tany Nails</h1>
 
-<input type ="text" id = "name"
-placeholder = "Customer name" required>
-<input type ="tel" id = "phone"
-placeholder = "Phone number" required>
-<select id= "service" required>
-  <option value = "">Choose nail service</option>
-  <option>Gel Nails</option>
-  <option>Acrylic Nails</option>
-  <option>Manicure</option>
-  <option>Pedicure</option>
-  <option>Nail Art</option>
-  <option>Stickon</option>
+<p class="subtitle">Book your nail appointment</p>
+
+<form id="bookingForm">
+
+<input id="name" type="text"
+placeholder="Your full name" required>
+
+<input id="phone" type="tel"
+placeholder="Your phone number" required>
+
+<select id="service" required>
+<option value="">Choose a service</option>
+<option>Gel Nails</option>
+<option>Acrylic Nails</option>
+<option>Manicure</option>
+<option>Pedicure</option>
+<option>Nail Art</option>
+<option>Stick-on Nails</option>
 </select>
-<input type=" date" id = "date" 
-placeholder = "date" required>
-<select id= "time" required>
-<option value ="">Choose time</option>
+
+<input id="date" type="date" required>
+
+<select id="time" required>
+<option value="">Choose appointment time</option>
 <option>09:00 AM</option>
 <option>10:00 AM</option>
 <option>11:00 AM</option>
@@ -66,75 +119,118 @@ placeholder = "date" required>
 <option>04:00 PM</option>
 </select>
 
-<button type = "submit"> Book Appointment</button>
+<button type="submit">Book via WhatsApp</button>
+
 </form>
 
-<h3>Bookings</h3>
+<h3>Bookings saved on this device</h3>
 
-<div id = "bookings"></div>
+<div id="bookings"></div>
+
+<footer>
+Appointments are confirmed by the nail technician through WhatsApp.
+</footer>
+
 </div>
+
 <script>
-let appointments = JSON.parse(localStorage.getItem("appointments")||"[]");
-function displayBookings(){ let output= document.getElementByld ("bookings");
-output.innerHTML="";
-appointments.forEach(function(booking,index){
-output.innerrHTML +='
-<div class="bookings">
-<b>${booking.name}</b<<br>
-Phone:${booking.phone}<br>
-Service:{booking.service}<br>
-Date:${booking.date}<br>
-Time:${booking.time}<br>
 
-<button onclick = "deleteBooking(${index})">
-Cancel Booking
-</button>
-</div>
-';
-});
-}
-document.getElementByld("bookingForm")
-.addEventlistener("submit",function (event){
-event.preventDefault();
-let booking = { name:document.getElementByld ("name").value,
-                phone: document.getElementByld("phone").value,
-				service: document.getElementByld("service").value,
-				date: document.getElementByld("date").value,
-				time: document.getElementByld("time").value	};
-let message =
-"NEW NAIL APPOINTMENT%0A+
-"Name:"+ encodeURIComponent(name) +"%OA" +
-"Phone:"+ encodeURIComponent(phone) + "%OA" +
-"Service: "+encodeURIComponent(service) + "%OA" +
-"Date: " +encodeURIComponent(date) + "OA" +
-"Time:" + encodeURIComponent(time) +"OA" +
-let salonNumber = " +263788308541";
+const salonNumber = "263788308541";
 
-let link = "https://wa.me/" + salonNumber +
-"?text=" + message;
-window.open(link,"_blank");
-
-appointments.push(booking);
-
-localStorage.setItem( "appointments" ,
-JSON.stringfy(appointments)
+let appointments = JSON.parse(
+    localStorage.getItem("appointments") || "[]"
 );
 
-alert("Appointment booked successfully!");
+// Prevent selecting dates in the past
+document.getElementById("date").min =
+    new Date().toISOString().split("T")[0];
 
-this.reset();
+function saveBookings() {
+    localStorage.setItem(
+        "appointments",
+        JSON.stringify(appointments)
+    );
+}
 
-displayBooking();
+function displayBookings() {
+
+    const output = document.getElementById("bookings");
+
+    output.innerHTML = "";
+
+    appointments.forEach(function(booking, index) {
+
+        const card = document.createElement("div");
+        card.className = "booking";
+
+        const details = document.createElement("p");
+
+        details.textContent =
+            booking.name + " | " +
+            booking.phone + " | " +
+            booking.service + " | " +
+            booking.date + " | " +
+            booking.time;
+
+        card.appendChild(details);
+
+        const cancelButton = document.createElement("button");
+
+        cancelButton.textContent = "Cancel Booking";
+        cancelButton.className = "cancel";
+
+        cancelButton.onclick = function() {
+            appointments.splice(index, 1);
+            saveBookings();
+            displayBookings();
+        };
+
+        card.appendChild(cancelButton);
+        output.appendChild(card);
+
+    });
+}
+
+document.getElementById("bookingForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const booking = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        service: document.getElementById("service").value,
+        date: document.getElementById("date").value,
+        time: document.getElementById("time").value
+    };
+
+    appointments.push(booking);
+
+    saveBookings();
+    displayBookings();
+
+    const message =
+        "NEW NAIL APPOINTMENT\n\n" +
+        "Name: " + booking.name + "\n" +
+        "Customer phone: " + booking.phone + "\n" +
+        "Service: " + booking.service + "\n" +
+        "Date: " + booking.date + "\n" +
+        "Time: " + booking.time;
+
+    const whatsappLink =
+        "https://wa.me/" + salonNumber +
+        "?text=" + encodeURIComponent(message);
+
+    window.open(whatsappLink, "_blank");
+
+    alert("Your booking details are ready in WhatsApp. Send the message to request confirmation.");
+
+    this.reset();
+
 });
 
-function deleteBooking(index){ appointments.splice(index, 1);
-
-localStorage.setItem( "appointments", JSON.stringify(appointments)
-);
-
 displayBookings();
-}
-displayBookings();
+
 </script>
 
 </body>
